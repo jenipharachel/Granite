@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 class TasksController < ApplicationController
-  before_action :load_task!, only: [:show, :update]
+  before_action :load_task!, only: %i[show update destroy]
 
   def index
     tasks = Task.all
@@ -9,27 +9,32 @@ class TasksController < ApplicationController
   end
 
   def create
-    task = Task.new(task_params)
-    task.save!
+    @task = Task.new(task_params)
+    @task.save!
     respond_with_success(t("successfully_created"))
   end
 
   def show
-    respond_with_json({ task: task })
+    respond_with_json({ task: @task })
   end
 
   def update
-    Task.update!(task_params)
+    @task.update!(task_params)
     respond_with_success(t("successfully_updated"))
+  end
+
+  def destroy
+    @task.destroy!
+    respond_with_json
   end
 
   private
 
     def load_task!
-      task = Task.find_by!(slug: params[:slug])
+      @task = Task.find_by!(slug: params[:slug])
     end
 
     def task_params
-      params.require(:slug).permit(:title)
+      params.require(:task).permit(:title)
     end
 end
