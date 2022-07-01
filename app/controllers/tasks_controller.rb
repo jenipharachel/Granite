@@ -20,7 +20,7 @@ class TasksController < ApplicationController
 
   def update
     @task.update!(task_params)
-    respond_with_success(t("successfully_updated", entity: "Task")
+    respond_with_success(t("successfully_updated", entity: "Task"))
   end
 
   def destroy
