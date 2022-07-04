@@ -9,8 +9,8 @@ class TasksController < ApplicationController
   def index
     # tasks = TaskPolicy::Scope.new(current_user, Task).resolve
     tasks = policy_scope(Task)
-    @pending_tasks = tasks.pending.includes(:assigned_user)
-    @completed_tasks = tasks.completed
+    @pending_tasks = tasks.includes(:assigned_user).of_status(:pending)
+    @completed_tasks = tasks.of_status(:completed)
   end
 
   def create
